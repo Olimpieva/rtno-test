@@ -45,6 +45,10 @@ const ChatList = ({ list }: Props) => {
     Record<string, true> | undefined
   >(undefined);
 
+  const [selectedManagersMap, setSelectedManagersMap] = useState<
+    Record<string, true> | undefined
+  >(undefined);
+
   const filteredList = useMemo(() => {
     let nextList = [...list];
 
@@ -60,8 +64,12 @@ const ChatList = ({ list }: Props) => {
       nextList = nextList.filter(item => selectedCompaniesMap[item.company]);
     }
 
+    if (selectedManagersMap) {
+      nextList = nextList.filter(item => selectedManagersMap[item.manager]);
+    }
+
     return nextList;
-  }, [list, dateFilter, selectedCompaniesMap]);
+  }, [list, dateFilter, selectedCompaniesMap, selectedManagersMap]);
 
   console.log({ dateFilter, selectedCompaniesMap });
 
@@ -132,10 +140,10 @@ const ChatList = ({ list }: Props) => {
 
   const managers = useMemo(() => {
     const res = list.reduce((acc, item) => {
-      if (!acc[item.company]) {
-        acc[item.company] = {
-          value: item.company,
-          label: item.company,
+      if (!acc[item.manager]) {
+        acc[item.manager] = {
+          value: item.manager,
+          label: item.manager,
         };
       }
 
@@ -172,7 +180,21 @@ const ChatList = ({ list }: Props) => {
     [],
   );
 
-  const onChangeEmployee = useCallback(() => {}, []);
+  const onChangeEmployee: NonNullable<SelectProps["onChange"]> = useCallback(
+    (_, options) => {
+      if (!options.length) {
+        setSelectedManagersMap(undefined);
+      } else {
+        setSelectedManagersMap(
+          (options as DefaultOptionType[]).reduce((acc, option) => {
+            acc[option.value as string] = true;
+            return acc;
+          }, {} as Record<string, true>),
+        );
+      }
+    },
+    [],
+  );
 
   return (
     <div className={css.container}>
@@ -192,7 +214,7 @@ const ChatList = ({ list }: Props) => {
         style={{ width: "100%" }}
         placeholder="select company"
         onChange={onChangeEmployee}
-        options={companies}
+        options={managers}
       />
       <div className={css.tableContainer}>
         <Table
