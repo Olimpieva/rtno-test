@@ -25,7 +25,7 @@ const disabled6MonthsDate: DatePickerProps["disabledDate"] = (
 };
 
 const ChatList = () => {
-  const { chats: list } = useMainPageContext();
+  const { chats: list, setActiveChatModalHandler } = useMainPageContext();
   const [dateFilter, setDateFilter] = useState<
     { minDate: number; maxDate: number } | undefined
   >(undefined);
@@ -214,7 +214,7 @@ const ChatList = () => {
           scroll={{ y: 329 }}
           onRow={record => ({
             onClick: () => {
-              console.log({ record });
+              setActiveChatModalHandler(record);
             },
           })}
           bordered

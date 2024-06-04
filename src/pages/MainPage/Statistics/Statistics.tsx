@@ -14,6 +14,7 @@ dayjs.locale("ru");
 
 const Statistics = () => {
   const { chats: list } = useMainPageContext();
+
   const [selected, setSelected] = useState<string[]>([]);
 
   const nextDataSet = useMemo(() => {

@@ -1,4 +1,4 @@
-type ChatMessage = {
+export type ChatMessage = {
   id: number;
   message: string;
   type: "bot" | "manager" | "client";

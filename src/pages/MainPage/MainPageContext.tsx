@@ -11,9 +11,14 @@ import { ChatItem } from "types";
 
 type MainPageContextType = {
   chats: ChatItem[];
+  activeChatModal?: ChatItem;
+  setActiveChatModalHandler: (chat: ChatItem | undefined) => void;
 };
 
-const MainPageContext = createContext<MainPageContextType>({ chats: [] });
+const MainPageContext = createContext<MainPageContextType>({
+  chats: [],
+  setActiveChatModalHandler: () => {},
+});
 
 type MainPageContextProviderProps = {
   children: React.ReactNode;
@@ -23,6 +28,16 @@ export const MainPageContextProvider = ({
   children,
 }: MainPageContextProviderProps) => {
   const [chatList, setChatList] = useState<ChatItem[]>([]);
+  const [activeChatModal, setActiveChatModal] = useState<ChatItem | undefined>(
+    undefined,
+  );
+
+  const setActiveChatModalHandler = useCallback(
+    (chat: ChatItem | undefined) => {
+      setActiveChatModal(chat);
+    },
+    [],
+  );
 
   const getChatList = useCallback(async () => {
     try {
@@ -37,11 +52,20 @@ export const MainPageContextProvider = ({
     getChatList();
   }, [getChatList]);
 
+  // TODO Debug only
+  useEffect(() => {
+    if (chatList.length) {
+      setActiveChatModalHandler(chatList[0]);
+    }
+  }, [chatList, setActiveChatModalHandler]);
+
   const values: MainPageContextType = useMemo(
     () => ({
       chats: chatList,
+      setActiveChatModalHandler,
+      activeChatModal,
     }),
-    [chatList],
+    [activeChatModal, chatList, setActiveChatModalHandler],
   );
 
   return (
