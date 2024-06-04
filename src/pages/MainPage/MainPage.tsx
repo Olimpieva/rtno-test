@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { getAllChats } from "api/chat";
+import { ChatItem } from "types";
 import ChatList from "./ChatList";
 import Statistics from "./Statistics";
+import ChatModal from "./ChatModal";
 
 import css from "./MainPage.module.scss";
 
 const MainPage = () => {
-  const [chatList, setChatList] = useState([]);
+  const [chatList, setChatList] = useState<ChatItem[]>([]);
 
   const getChatList = useCallback(async () => {
     try {
@@ -24,14 +26,18 @@ const MainPage = () => {
   console.log({ chatList });
 
   if (!chatList.length) return <div>Loading...</div>;
+
   return (
-    <div className={css.page}>
-      MainPage
-      <div>
-        <ChatList list={chatList} />
+    <>
+      <div className={css.page}>
+        MainPage
+        <div>
+          <ChatList list={chatList} />
+        </div>
+        <Statistics list={chatList} />
       </div>
-      <Statistics list={chatList} />
-    </div>
+      <ChatModal />
+    </>
   );
 };
 

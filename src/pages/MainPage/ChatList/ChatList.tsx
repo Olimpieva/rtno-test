@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Calendar, Table, DatePicker, Select } from "antd";
+import { Table, DatePicker, Select } from "antd";
 import type { DatePickerProps, SelectProps } from "antd";
 import type { ColumnsType } from "antd/lib/table";
-import { CalendarProps } from "antd/lib";
 import { DefaultOptionType } from "antd/es/select";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
+import { ChatItem } from "types";
 
 import css from "./ChatList.module.scss";
 
@@ -23,17 +23,8 @@ const disabled6MonthsDate: DatePickerProps["disabledDate"] = (
   return false;
 };
 
-type Chat = {
-  _id: number;
-  first: number;
-  last: number;
-  company: string;
-  manager: string;
-  comments: string;
-};
-
 type Props = {
-  list: Chat[];
+  list: ChatItem[];
 };
 
 const ChatList = ({ list }: Props) => {
@@ -73,7 +64,7 @@ const ChatList = ({ list }: Props) => {
 
   console.log({ dateFilter, selectedCompaniesMap });
 
-  const columns: ColumnsType<Chat> = useMemo(
+  const columns: ColumnsType<ChatItem> = useMemo(
     () => [
       {
         title: "id",

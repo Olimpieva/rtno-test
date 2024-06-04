@@ -5,20 +5,12 @@ import { getAllChats } from "api/chat";
 import { Select, Space } from "antd";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
+import { ChatItem } from "types";
 
 import css from "./Statistics.module.scss";
 
-type Chat = {
-  _id: number;
-  first: number;
-  last: number;
-  company: string;
-  manager: string;
-  comments: string;
-};
-
 type Props = {
-  list: Chat[];
+  list: ChatItem[];
 };
 
 dayjs.locale("ru");
