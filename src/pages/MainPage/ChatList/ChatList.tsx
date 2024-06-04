@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
-import { Calendar, Table, DatePicker } from "antd";
+import React, { useCallback, useMemo, useState } from "react";
+import { Calendar, Table, DatePicker, Select } from "antd";
 import type { DatePickerProps } from "antd";
 import type { ColumnsType } from "antd/lib/table";
 import { CalendarProps } from "antd/lib";
+import dayjs, { Dayjs } from "dayjs";
 
 import css from "./ChatList.module.scss";
 
@@ -35,11 +36,24 @@ type Props = {
 };
 
 const ChatList = ({ list }: Props) => {
-  const [selected, setSelected] = useState({
-    company: [],
-    manager: [],
-  });
-  const filteredList = useMemo(() => {}, []);
+  const [dateFilter, setDateFilter] = useState<
+    { minDate: number; maxDate: number } | undefined
+  >(undefined);
+
+  const filteredList = useMemo(() => {
+    if (!dateFilter) {
+      return list;
+    }
+
+    const { maxDate, minDate } = dateFilter;
+
+    return list.filter(
+      listItem => listItem.first >= minDate && listItem.first <= maxDate,
+    );
+  }, [list, dateFilter]);
+
+  console.log({ dateFilter });
+
   const columns: ColumnsType<Chat> = useMemo(
     () => [
       {
@@ -90,13 +104,46 @@ const ChatList = ({ list }: Props) => {
     [],
   );
 
-  const wrapperStyle: React.CSSProperties = {
-    width: 300,
-  };
+  const companies = useMemo(() => {
+    const res = list.reduce((acc, item) => {
+      if (!acc[item.company]) {
+        acc[item.company] = {
+          value: item.company,
+          label: item.company,
+        };
+      }
 
-  const onChange = (value: any, mode: any) => {
-    console.log({ value: value[0], mode });
-  };
+      return acc;
+    }, {} as Record<string, { label: string; value: string }>);
+
+    return Object.values(res);
+  }, [list]);
+
+  const managers = useMemo(() => {
+    const res = list.reduce((acc, item) => {
+      if (!acc[item.company]) {
+        acc[item.company] = {
+          value: item.company,
+          label: item.company,
+        };
+      }
+
+      return acc;
+    }, {} as Record<string, { label: string; value: string }>);
+
+    return Object.values(res);
+  }, [list]);
+
+  const onChange = useCallback((_: any, mode: any) => {
+    if (mode[0] !== "") {
+      setDateFilter({
+        minDate: dayjs(mode[0]).startOf("day").valueOf(),
+        maxDate: dayjs(mode[1]).endOf("day").valueOf(),
+      });
+    } else {
+      setDateFilter(undefined);
+    }
+  }, []);
 
   return (
     <div className={css.container}>
@@ -104,9 +151,23 @@ const ChatList = ({ list }: Props) => {
         <h3 className={css.title}>Список диалогов</h3>
       </div>
       <RangePicker disabledDate={disabled6MonthsDate} onChange={onChange} />
+      <Select
+        mode="multiple"
+        style={{ width: "100%" }}
+        placeholder="select company"
+        onChange={onChange}
+        options={companies}
+      />
+      <Select
+        mode="multiple"
+        style={{ width: "100%" }}
+        placeholder="select company"
+        onChange={onChange}
+        options={companies}
+      />
       <div className={css.tableContainer}>
         <Table
-          dataSource={list}
+          dataSource={filteredList}
           columns={columns}
           rowKey={item => item._id}
           pagination={false}
