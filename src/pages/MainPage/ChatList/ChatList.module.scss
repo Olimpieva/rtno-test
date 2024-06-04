@@ -8,3 +8,13 @@
 //   max-height: 500px;
 //   overflow: scroll;
 // }
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.selector {
+  max-width: 200px;
+}

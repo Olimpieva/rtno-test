@@ -52,13 +52,6 @@ export const MainPageContextProvider = ({
     getChatList();
   }, [getChatList]);
 
-  // TODO Debug only
-  useEffect(() => {
-    if (chatList.length) {
-      setActiveChatModalHandler(chatList[0]);
-    }
-  }, [chatList, setActiveChatModalHandler]);
-
   const values: MainPageContextType = useMemo(
     () => ({
       chats: chatList,

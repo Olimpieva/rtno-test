@@ -5,9 +5,17 @@ import type { ColumnsType } from "antd/lib/table";
 import { DefaultOptionType } from "antd/es/select";
 import dayjs from "dayjs";
 import { ChatItem } from "types";
+import { RangePickerProps } from "antd/es/date-picker";
 
 import css from "./ChatList.module.scss";
 import { useMainPageContext } from "../MainPageContext";
+
+const locale = {
+  lang: {
+    locale: "ru",
+    rangePlaceholder: ["Дата начала", "Дата окончания"],
+  },
+} as RangePickerProps["locale"];
 
 const { RangePicker } = DatePicker;
 
@@ -190,21 +198,29 @@ const ChatList = () => {
       <div className={css.header}>
         <h3 className={css.title}>Список диалогов</h3>
       </div>
-      <RangePicker disabledDate={disabled6MonthsDate} onChange={onChangeDate} />
-      <Select
-        mode="multiple"
-        style={{ width: "100%" }}
-        placeholder="select company"
-        onChange={onChangeCompany}
-        options={companies}
-      />
-      <Select
-        mode="multiple"
-        style={{ width: "100%" }}
-        placeholder="select company"
-        onChange={onChangeEmployee}
-        options={managers}
-      />
+      <div className={css.filters}>
+        <RangePicker
+          disabledDate={disabled6MonthsDate}
+          onChange={onChangeDate}
+          locale={locale}
+        />
+        <Select
+          mode="multiple"
+          style={{ width: "100%" }}
+          placeholder="Компания"
+          onChange={onChangeCompany}
+          options={companies}
+          className={css.selector}
+        />
+        <Select
+          mode="multiple"
+          style={{ width: "100%" }}
+          placeholder="Менеджер"
+          onChange={onChangeEmployee}
+          options={managers}
+          className={css.selector}
+        />
+      </div>
       <div className={css.tableContainer}>
         <Table
           dataSource={filteredList}
