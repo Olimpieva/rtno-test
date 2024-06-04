@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Calendar, Table, DatePicker, Select } from "antd";
-import type { DatePickerProps } from "antd";
+import type { DatePickerProps, SelectProps } from "antd";
 import type { ColumnsType } from "antd/lib/table";
 import { CalendarProps } from "antd/lib";
+import { DefaultOptionType } from "antd/es/select";
 import dayjs, { Dayjs } from "dayjs";
 
 import css from "./ChatList.module.scss";
@@ -40,19 +41,29 @@ const ChatList = ({ list }: Props) => {
     { minDate: number; maxDate: number } | undefined
   >(undefined);
 
+  const [selectedCompaniesMap, setSelectedCompaniesMap] = useState<
+    Record<string, true> | undefined
+  >(undefined);
+
   const filteredList = useMemo(() => {
-    if (!dateFilter) {
-      return list;
+    let nextList = [...list];
+
+    if (dateFilter) {
+      const { maxDate, minDate } = dateFilter;
+
+      nextList = nextList.filter(
+        listItem => listItem.first >= minDate && listItem.first <= maxDate,
+      );
     }
 
-    const { maxDate, minDate } = dateFilter;
+    if (selectedCompaniesMap) {
+      nextList = nextList.filter(item => selectedCompaniesMap[item.company]);
+    }
 
-    return list.filter(
-      listItem => listItem.first >= minDate && listItem.first <= maxDate,
-    );
-  }, [list, dateFilter]);
+    return nextList;
+  }, [list, dateFilter, selectedCompaniesMap]);
 
-  console.log({ dateFilter });
+  console.log({ dateFilter, selectedCompaniesMap });
 
   const columns: ColumnsType<Chat> = useMemo(
     () => [
@@ -134,7 +145,7 @@ const ChatList = ({ list }: Props) => {
     return Object.values(res);
   }, [list]);
 
-  const onChange = useCallback((_: any, mode: any) => {
+  const onChangeDate = useCallback((_: any, mode: any) => {
     if (mode[0] !== "") {
       setDateFilter({
         minDate: dayjs(mode[0]).startOf("day").valueOf(),
@@ -145,24 +156,42 @@ const ChatList = ({ list }: Props) => {
     }
   }, []);
 
+  const onChangeCompany: NonNullable<SelectProps["onChange"]> = useCallback(
+    (_, options) => {
+      if (!options.length) {
+        setSelectedCompaniesMap(undefined);
+      } else {
+        setSelectedCompaniesMap(
+          (options as DefaultOptionType[]).reduce((acc, option) => {
+            acc[option.value as string] = true;
+            return acc;
+          }, {} as Record<string, true>),
+        );
+      }
+    },
+    [],
+  );
+
+  const onChangeEmployee = useCallback(() => {}, []);
+
   return (
     <div className={css.container}>
       <div className={css.header}>
         <h3 className={css.title}>Список диалогов</h3>
       </div>
-      <RangePicker disabledDate={disabled6MonthsDate} onChange={onChange} />
+      <RangePicker disabledDate={disabled6MonthsDate} onChange={onChangeDate} />
       <Select
         mode="multiple"
         style={{ width: "100%" }}
         placeholder="select company"
-        onChange={onChange}
+        onChange={onChangeCompany}
         options={companies}
       />
       <Select
         mode="multiple"
         style={{ width: "100%" }}
         placeholder="select company"
-        onChange={onChange}
+        onChange={onChangeEmployee}
         options={companies}
       />
       <div className={css.tableContainer}>
