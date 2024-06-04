@@ -1,0 +1,124 @@
+@import './variables.scss';
+
+%pageContainerHiddenShared {
+  @media screen and (max-width: $mobileBreakpoint) {
+    display: none;
+    pointer-events: none;
+  }
+}
+
+%submitPageContainerShared {
+  padding: 20px;
+  max-width: 500px;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+
+  @media screen and (max-width: $mobileBreakpoint) {
+    border: none;
+  }
+
+  @media screen and (max-width: $hiddenSidebarBreakpoint) {
+    max-width: unset;
+  }
+}
+
+%pageTitleShared {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+}
+
+%submitButtonShared {
+  width: 100%;
+  background: $mainGradient;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.043);
+  border: none;
+  transition: all 0.2s ease-out;
+  line-height: 24px;
+
+  &:hover {
+    background: $mainGradient;
+    box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.043);
+    border: none;
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    background: #e2e3e6;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+%textButtonShared {
+  text-decoration: none;
+  height: fit-content;
+  padding: 0;
+  margin: 0;
+  background: $mainGradient;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: opacity 0.2s ease-out;
+
+  &:hover {
+    background: $mainGradient;
+    opacity: 0.8;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+%treeWrapper {
+  :global {
+    .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: transparent;
+    }
+
+    .ant-tree-treenode-motion {
+      width: 100%;
+    }
+
+    .ant-tree-treenode {
+      width: 100%;
+    }
+
+    .ant-tree-node-content-wrapper {
+      flex: 1;
+    }
+
+    .ant-tree-draggable-icon {
+      cursor: grab;
+    }
+  }
+}
+
+%authForm {
+  :global {
+    .ant-form-item {
+      margin-bottom: 30px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    .ant-input {
+      text-align: center;
+
+      &-prefix {
+        margin-right: 6px;
+      }
+
+      &-affix-wrapper {
+        padding: 8px 12px;
+      }
+
+      &:placeholder-shown {
+        text-align: center;
+      }
+    }
+  }
+}
