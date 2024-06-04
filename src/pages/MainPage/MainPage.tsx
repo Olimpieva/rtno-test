@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from "react";
-import Table from "./Table";
+import React, { useCallback, useEffect, useState } from "react";
+import { getAllChats } from "api/chat";
+import ChatList from "./ChatList";
+import Statistics from "./Statistics";
+
+import css from "./MainPage.module.scss";
 
 const MainPage = () => {
-  const [data, setData] = useState([]);
+  const [chatList, setChatList] = useState([]);
 
-  useEffect(() => {
-    fetch("/api/data")
-      .then(response => response.json())
-      // @ts-ignore
-      .then(data => {
-        console.log({ data });
-        setData(data);
-      })
-      .catch(error => console.error("Error fetching data:", error));
+  const getChatList = useCallback(async () => {
+    try {
+      const chats = await getAllChats();
+      setChatList(chats);
+    } catch (error) {
+      console.error("Oops! Something went wrong!", error);
+    }
   }, []);
 
-  console.log({ data });
+  useEffect(() => {
+    getChatList();
+  }, [getChatList]);
+
+  console.log({ chatList });
+
+  if (!chatList.length) return <div>Loading...</div>;
   return (
-    <div>
+    <div className={css.page}>
       MainPage
-      <Table />
+      <div>
+        <ChatList list={chatList} />
+      </div>
+      <Statistics list={chatList} />
     </div>
   );
 };

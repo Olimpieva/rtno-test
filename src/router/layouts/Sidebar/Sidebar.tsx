@@ -13,16 +13,16 @@ type LinkItem = {
 
 const links: LinkItem[] = [
   {
-    label: "Чат",
+    label: "Чаты",
     to: "/chat",
+  },
+  {
+    label: "Статистика (график тут)",
+    to: "/statistics",
   },
   {
     label: "Компании",
     to: "/companies",
-  },
-  {
-    label: "Статистика",
-    to: "/statistics",
   },
   {
     label: "Настройки",

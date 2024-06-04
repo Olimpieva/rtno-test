@@ -7,8 +7,9 @@ const Router = () => (
   <BrowserRouter>
     <MainLayout>
       <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/" element={<Navigate to="/chats" />} />
+        <Route path="/chats" element={<MainPage />} />
+        <Route path="*" element={<Navigate to="/chats" />} />
       </Routes>
     </MainLayout>
   </BrowserRouter>
