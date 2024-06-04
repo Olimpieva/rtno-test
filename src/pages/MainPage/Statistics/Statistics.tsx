@@ -8,14 +8,12 @@ import "dayjs/locale/ru";
 import { ChatItem } from "types";
 
 import css from "./Statistics.module.scss";
-
-type Props = {
-  list: ChatItem[];
-};
+import { useMainPageContext } from "../MainPageContext";
 
 dayjs.locale("ru");
 
-const Statistics = ({ list }: Props) => {
+const Statistics = () => {
+  const { chats: list } = useMainPageContext();
   const [selected, setSelected] = useState<string[]>([]);
 
   const nextDataSet = useMemo(() => {

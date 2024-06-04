@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import { ChatItem } from "types";
 
 import css from "./ChatList.module.scss";
+import { useMainPageContext } from "../MainPageContext";
 
 const { RangePicker } = DatePicker;
 
@@ -23,11 +24,8 @@ const disabled6MonthsDate: DatePickerProps["disabledDate"] = (
   return false;
 };
 
-type Props = {
-  list: ChatItem[];
-};
-
-const ChatList = ({ list }: Props) => {
+const ChatList = () => {
+  const { chats: list } = useMainPageContext();
   const [dateFilter, setDateFilter] = useState<
     { minDate: number; maxDate: number } | undefined
   >(undefined);

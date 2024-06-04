@@ -6,35 +6,21 @@ import Statistics from "./Statistics";
 import ChatModal from "./ChatModal";
 
 import css from "./MainPage.module.scss";
+import { useMainPageContext } from "./MainPageContext";
 
 const MainPage = () => {
-  const [chatList, setChatList] = useState<ChatItem[]>([]);
+  const { chats } = useMainPageContext();
 
-  const getChatList = useCallback(async () => {
-    try {
-      const chats = await getAllChats();
-      setChatList(chats);
-    } catch (error) {
-      console.error("Oops! Something went wrong!", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    getChatList();
-  }, [getChatList]);
-
-  console.log({ chatList });
-
-  if (!chatList.length) return <div>Loading...</div>;
+  if (!chats.length) return <div>Loading...</div>;
 
   return (
     <>
       <div className={css.page}>
         MainPage
         <div>
-          <ChatList list={chatList} />
+          <ChatList />
         </div>
-        <Statistics list={chatList} />
+        <Statistics />
       </div>
       <ChatModal />
     </>

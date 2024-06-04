@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { MainPage } from "pages";
+import { MainPageContextProvider } from "pages/MainPage/MainPageContext";
 import { MainLayout } from "./layouts";
 
 const Router = () => (
@@ -8,7 +9,14 @@ const Router = () => (
     <MainLayout>
       <Routes>
         <Route path="/" element={<Navigate to="/chats" />} />
-        <Route path="/chats" element={<MainPage />} />
+        <Route
+          path="/chats"
+          element={
+            <MainPageContextProvider>
+              <MainPage />
+            </MainPageContextProvider>
+          }
+        />
         <Route path="*" element={<Navigate to="/chats" />} />
       </Routes>
     </MainLayout>
