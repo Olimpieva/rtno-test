@@ -25,8 +25,6 @@ const Statistics = () => {
     return list;
   }, [list, selected]);
 
-  console.log({ nextDataSet });
-
   const [minDate, maxDate] = useMemo(() => {
     let minDate = Infinity;
     let maxDate = -Infinity;
@@ -66,21 +64,14 @@ const Statistics = () => {
 
   const daysDiff = Math.ceil(dayjs(maxDate).diff(minDate, "days", true));
 
-  console.log({
-    chatToDatesMap,
-    minDate,
-    maxDate,
-    daysDiff,
-  });
-
-  const xAxisValues = useMemo(() => {
-    console.log("1");
-
-    return new Array(daysDiff).fill(0).map((_, index) => {
-      const date = dayjs(minDate).add(index, "day");
-      return date.format("DD MMM");
-    });
-  }, [daysDiff, minDate]);
+  const xAxisValues = useMemo(
+    () =>
+      new Array(daysDiff).fill(0).map((_, index) => {
+        const date = dayjs(minDate).add(index, "day");
+        return date.format("DD MMM");
+      }),
+    [daysDiff, minDate],
+  );
 
   const series = useMemo(
     () => ({
@@ -95,8 +86,6 @@ const Statistics = () => {
     }),
     [chatToDatesMap, daysDiff, minDate],
   );
-
-  console.log({ series, xAxisValues });
 
   const options = useMemo(
     () => ({
@@ -182,9 +171,11 @@ const Statistics = () => {
       <Select
         mode="multiple"
         style={{ width: "100%" }}
-        placeholder="select company"
+        placeholder="Выберите компанию"
         onChange={onChange}
         options={companies}
+        className={css.selector}
+        maxTagCount={2}
       />
 
       <ReactECharts option={options} notMerge />

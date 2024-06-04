@@ -11,12 +11,12 @@ import { useMainPageContext } from "./MainPageContext";
 const MainPage = () => {
   const { chats } = useMainPageContext();
 
-  if (!chats.length) return <div>Loading...</div>;
+  if (!chats.length) return <div>Загрузка...</div>;
 
   return (
     <>
       <div className={css.page}>
-        MainPage
+        Чаты
         <div>
           <ChatList />
         </div>

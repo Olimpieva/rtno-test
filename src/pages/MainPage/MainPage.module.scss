@@ -4,3 +4,15 @@
   flex-direction: column;
   gap: 40px;
 }
+
+:global(
+    .ant-select-multiple
+      .ant-select-selection-overflow
+      .ant-select-selection-item-content
+  ) {
+  line-height: 22px;
+}
+
+:global(.ant-select-dropdown .ant-select-item-option-content) {
+  line-height: 22px;
+}

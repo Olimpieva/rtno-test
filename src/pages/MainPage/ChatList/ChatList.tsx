@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Table, DatePicker, Select } from "antd";
+import { Table, DatePicker, Select, Tooltip } from "antd";
 import type { DatePickerProps, SelectProps } from "antd";
 import type { ColumnsType } from "antd/lib/table";
 import { DefaultOptionType } from "antd/es/select";
@@ -74,8 +74,13 @@ const ChatList = () => {
     () => [
       {
         title: "id",
-        dataIndex: "id",
-        key: "id",
+        dataIndex: "_id",
+        key: "_id",
+        render: (_, record) => (
+          <div className={css.idCell} onClick={e => e.stopPropagation()}>
+            <Tooltip title={record._id}>{record._id}</Tooltip>
+          </div>
+        ),
       },
       {
         title: "Дата начала диалога",
@@ -211,6 +216,7 @@ const ChatList = () => {
           onChange={onChangeCompany}
           options={companies}
           className={css.selector}
+          maxTagCount={1}
         />
         <Select
           mode="multiple"
@@ -219,6 +225,7 @@ const ChatList = () => {
           onChange={onChangeEmployee}
           options={managers}
           className={css.selector}
+          maxTagCount={1}
         />
       </div>
       <div className={css.tableContainer}>
@@ -228,6 +235,7 @@ const ChatList = () => {
           rowKey={item => item._id}
           pagination={false}
           scroll={{ y: 329 }}
+          rowClassName={css.row}
           onRow={record => ({
             onClick: () => {
               setActiveChatModalHandler(record);
