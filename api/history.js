@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("chat");
-    const collection = db.collection("info");
+    const collection = db.collection("history");
     const data = await collection.find({}).toArray();
     res.status(200).json(data);
   } catch (e) {
