@@ -10,10 +10,6 @@ type Props = {
 };
 
 const Message = ({ message, managerName }: Props) => {
-  if (false) {
-    console.log(1);
-  }
-
   const title = useMemo(() => {
     if (message.type === "bot") {
       return "Бот";

@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { getAllChats } from "api/chat";
-import { ChatItem } from "types";
+import React from "react";
 import ChatList from "./ChatList";
 import Statistics from "./Statistics";
 import ChatModal from "./ChatModal";

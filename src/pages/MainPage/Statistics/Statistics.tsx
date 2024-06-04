@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { EChartsOption } from "echarts";
-import { getAllChats } from "api/chat";
-import { Select, Space } from "antd";
+import { Select } from "antd";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-import { ChatItem } from "types";
 
 import css from "./Statistics.module.scss";
 import { useMainPageContext } from "../MainPageContext";
@@ -163,8 +161,6 @@ const Statistics = () => {
   const onChange = useCallback((value: string[]) => {
     setSelected(value);
   }, []);
-
-  console.log({ selected });
 
   return (
     <div className={css.container}>
