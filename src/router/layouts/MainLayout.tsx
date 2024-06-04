@@ -10,6 +10,7 @@ type Props = {
 };
 
 const MainLayout = ({ children }: Props) => {
+  // @ts-ignore
   const [state, dispatch] = useReducer(testReducer, initialState);
 
   return (

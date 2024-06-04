@@ -3,6 +3,8 @@ import ReactECharts from "echarts-for-react";
 import { EChartsOption } from "echarts";
 import { getAllChats } from "api/chat";
 import { Select, Space } from "antd";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
 
 import css from "./Statistics.module.scss";
 
@@ -19,6 +21,8 @@ type Props = {
   list: Chat[];
 };
 
+dayjs.locale("ru");
+
 const Statistics = ({ list }: Props) => {
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -30,50 +34,75 @@ const Statistics = ({ list }: Props) => {
     return list;
   }, [list, selected]);
 
-  const chatToDatesMap = useMemo(
-    () =>
-      nextDataSet.reduce((acc, item) => {
-        console.log({ item, acc: JSON.parse(JSON.stringify(acc)) });
-        if (!acc[item.first]) {
-          console.log("ya tut");
-          acc[item.first] = 0;
-        }
+  console.log({ nextDataSet });
 
-        acc[item.first] += 1;
+  const [minDate, maxDate] = useMemo(() => {
+    let minDate = Infinity;
+    let maxDate = -Infinity;
 
-        return acc;
-      }, {} as Record<number, number>),
-    [nextDataSet],
-  );
+    list.forEach(item => {
+      const { first } = item;
 
-  console.log({ chatToDatesMap });
+      if (first < minDate) {
+        minDate = dayjs(first).startOf("day").valueOf();
+      }
+
+      if (first > maxDate) {
+        maxDate = dayjs(first).endOf("day").valueOf();
+      }
+    });
+
+    return [minDate, maxDate];
+  }, [list]);
+
+  const chatToDatesMap = useMemo(() => {
+    const nextChatToDatesMap = nextDataSet.reduce((acc, item) => {
+      const { first } = item;
+
+      const startOf = dayjs(first).startOf("day").valueOf();
+
+      if (!acc[startOf]) {
+        acc[startOf] = 0;
+      }
+
+      acc[startOf] += 1;
+
+      return acc;
+    }, {} as Record<number, number>);
+
+    return nextChatToDatesMap;
+  }, [nextDataSet]);
+
+  const daysDiff = Math.ceil(dayjs(maxDate).diff(minDate, "days", true));
+
+  console.log({
+    chatToDatesMap,
+    minDate,
+    maxDate,
+    daysDiff,
+  });
 
   const xAxisValues = useMemo(() => {
-    const res = list
-      .sort((a, b) => a.first - b.first)
-      .reduce((acc, item) => {
-        if (acc[item.first]) return acc;
+    console.log("1");
 
-        acc[item.first] = new Date(item.first).toLocaleString("ru", {
-          month: "long",
-          day: "numeric",
-        });
-
-        return acc;
-      }, {} as Record<number, string>);
-
-    return Object.values(res);
-  }, [list]);
+    return new Array(daysDiff).fill(0).map((_, index) => {
+      const date = dayjs(minDate).add(index, "day");
+      return date.format("DD MMM");
+    });
+  }, [daysDiff, minDate]);
 
   const series = useMemo(
     () => ({
-      data: Object.values(chatToDatesMap),
+      data: new Array(daysDiff).fill(0).map((_, index) => {
+        const date = dayjs(minDate).add(index, "day").startOf("day");
+        return chatToDatesMap[date.valueOf()] || 0;
+      }),
       type: "line",
       symbol: "none",
       smooth: true,
       name: "dada",
     }),
-    [chatToDatesMap],
+    [chatToDatesMap, daysDiff, minDate],
   );
 
   console.log({ series, xAxisValues });
@@ -84,7 +113,7 @@ const Statistics = ({ list }: Props) => {
         trigger: "axis",
         formatter: (params: EChartsOption[]) => {
           const [options] = params;
-          return (options.value as number).toString();
+          return options.name;
         },
       },
       grid: {
@@ -106,6 +135,7 @@ const Statistics = ({ list }: Props) => {
             show: false,
           },
           axisLabel: {
+            interval: 5,
             show: true,
             rotate: 40,
             color: "black",
