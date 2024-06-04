@@ -2,3 +2,5 @@
 public
 build
 node_modules
+server
+api
