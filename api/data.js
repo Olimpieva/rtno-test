@@ -8,7 +8,7 @@ const client = new MongoClient(process.env.MONGODB_URI, {
 module.exports = async (req, res) => {
   try {
     await client.connect();
-    const db = client.db("chat");
+    const db = client.db("chats");
     const collection = db.collection("info");
     const data = await collection.find({}).toArray();
     res.status(200).json(data);
