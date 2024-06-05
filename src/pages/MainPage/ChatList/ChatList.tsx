@@ -52,7 +52,7 @@ const ChatList = () => {
         dataIndex: "_id",
         key: "_id",
         render: (_, record) => (
-          <div className={css.idCell} onClick={e => e.stopPropagation()}>
+          <div className={css.cuttedCell} onClick={e => e.stopPropagation()}>
             <Tooltip title={record._id}>{record._id}</Tooltip>
           </div>
         ),
@@ -95,6 +95,12 @@ const ChatList = () => {
         title: "Комментарии",
         key: "comments",
         dataIndex: "comments",
+        render: (_, record) => {
+          const { chat } = record;
+          const lastMessage = chat[chat.length - 1].message;
+
+          return <div className={css.cuttedCell}>{lastMessage}</div>;
+        },
       },
     ],
     [],

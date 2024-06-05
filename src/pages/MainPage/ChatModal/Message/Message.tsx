@@ -29,8 +29,8 @@ const Message = ({ message, managerName }: Props) => {
         [css.client]: message.type === "client",
       })}
     >
-      <div>{title}</div>
-      <div>{message.message}</div>
+      <h5 className={css.title}>{title}</h5>
+      <p>{message.message}</p>
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import { Typography } from "antd";
 import { useMainPageContext } from "./MainPageContext";
 import ChatList from "./ChatList";
 import Statistics from "./Statistics";
