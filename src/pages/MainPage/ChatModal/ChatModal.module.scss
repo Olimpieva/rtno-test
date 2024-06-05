@@ -1,9 +1,9 @@
 .list {
+  padding: 20px;
   margin-top: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-
   max-height: 50vh;
   overflow: auto;
 }

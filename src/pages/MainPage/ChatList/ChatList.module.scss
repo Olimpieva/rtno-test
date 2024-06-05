@@ -1,24 +1,14 @@
-.header {
+.container {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.filters {
-  display: flex;
+  flex-direction: column;
   gap: 16px;
-  margin-bottom: 32px;
-}
-
-.selector {
-  max-width: 250px;
 }
 
 .row {
   cursor: pointer;
 }
 
-.idCell {
+.cuttedCell {
   white-space: nowrap;
   width: 100%;
   overflow: hidden;

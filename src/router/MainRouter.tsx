@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { MainPage } from "pages";
-import { MainPageContextProvider } from "pages/MainPage/MainPageContext";
+import { MainPageContextProvider } from "pages/MainPage";
 import { MainLayout } from "./layouts";
 
 const Router = () => (
