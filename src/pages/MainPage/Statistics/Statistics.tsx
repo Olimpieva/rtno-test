@@ -4,9 +4,9 @@ import { EChartsOption } from "echarts";
 import { Select } from "antd";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
+import { useMainPageContext } from "../MainPageContext";
 
 import css from "./Statistics.module.scss";
-import { useMainPageContext } from "../MainPageContext";
 
 dayjs.locale("ru");
 
@@ -164,6 +164,7 @@ const Statistics = () => {
 
   return (
     <div className={css.container}>
+      <h3 className={css.title}>Статистика</h3>
       <Select
         mode="multiple"
         style={{ width: "100%" }}

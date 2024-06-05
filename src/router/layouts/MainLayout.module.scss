@@ -10,14 +10,10 @@
 }
 
 .content {
-  padding: 40px;
+  padding: 20px 40px;
   flex: 1;
   position: relative;
   overflow: auto;
   display: flex;
-  //   max-width: 1240px;
-
-  & > * {
-    flex: 1 1 50%;
-  }
+  max-width: 1280px;
 }
